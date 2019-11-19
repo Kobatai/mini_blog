@@ -61,12 +61,34 @@ class Request
 
     $request_uri = $this->getRequestUri();
 
+    // URLにフロントコントローラーが含まれる場合 strposは第一引数が第二引数に出現する位置を探す関数
     if (0 === strpos($request_uri, $script_name)) {
+      // SCRIPT_NAMEがベースURLと一致するためそのまま返す
       return $script_name;
+    // dirname関数はファイルのパスからディレクトリ部分を抜き出す
     } else if (0 === strpos($request_uri,dirname($script_name))) {
+      // rtrimで右側に/が続かないようにする
       return rtrim($script_name, '/');
     }
 
     return '';
+  }
+
+  public function getPathInfo()
+  {
+    $base_url = $this->getBaseUrl();
+    $request_uri = $this->getRequestUri();
+
+    // $posは?が出現するまでの位置
+    if (false !== ($pos = strpos($request_uri, '?'))) {
+      // substr関数は第一引数で指定した文字列のうち、第二引数で指定した位置から第三引数で指定した文字数分取得する関数
+      // ?より前の箇所を抜き出す
+      $request_uri = substr($request_uri, 0, $pos);
+    }
+
+    // ?以降（GETパラメーター)を除いたrequest_uriからベースURLを引いたものをpath_infoにする
+    $path_info = (string)substr($request_uri, strlen($base_url));
+
+    return $path_info;
   }
 }
