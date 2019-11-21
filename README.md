@@ -1,5 +1,6 @@
 ## DBmanagerの接続の仕方
 
+```
 $db_manager = new DbManager();  
 $db_manager->connect('master', array(  
   'dsn' => 'mysql:dbname=mydb;host=localhost',  
@@ -8,3 +9,4 @@ $db_manager->connect('master', array(
 ));  
 $db_manager->getConnection('master');  
 $db_manager->getConnection(); #=> masterがかえってくる  
+```
