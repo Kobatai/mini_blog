@@ -4,12 +4,12 @@ class DbManager
 	// PDOクラスのインスタンスを配列で保持
 	protected $connections = array();
 
-	// 複数のDBへの接続情報　Repositoryクラスと接続名の対応を格納
+	// 複数のDBへの接続情報 Repositoryクラスと接続名の対応を格納
 	protected $repository_connection_map();
 
 	public fucntion connect($name, $params)
 	{
-		// paramsは接続に必要な情報　mergeで中身を入れる　キーはnewするときに必ずあることになる
+		// paramsは接続に必要な情報 mergeで中身を入れる キーはnewするときに必ずあることになる
 		$params = array_merge(array(
 			'dsn'       	=> null,
 			'user'		 	=> '',
@@ -32,7 +32,7 @@ class DbManager
 	public function getConnection($name = null)
 	{
 		if (is_null($name)) {
-			// current関数は配列の内部ポインタが示す場所を取得　配列の先頭の値の要素を指すように初期化する
+			// current関数は配列の内部ポインタが示す場所を取得 配列の先頭の値の要素を指すように初期化する
 			// つまりgetConnectionした際に$nameがなければ、最初に作成した接続先にアクセスする
 			return current($this->connections);
 		}
