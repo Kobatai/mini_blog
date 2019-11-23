@@ -79,4 +79,46 @@ abstract class Controller
     $this->response->setStatusCode(302, 'Found');
     $this->response->setHttpHeader('Location', $url);
   }
+
+  // csrf対策
+  // ワンタイムトークン作るためのメソッド formでhiddenで送る
+  protected function generateCsrfToken($form_name)
+  {
+    // tokenをフォームごとに識別
+    $key = 'csrf_tokens/' . $form_name;
+    $tokens = $this->session->get($key, array());
+    if (count($tokens) >= 10) {
+      // 10個以上トークンがあればarray_shiftで古いものを消す
+      array_shift($tokens);
+    }
+
+
+    $token = sha1($form_name . session_id() . microtime());
+    $tokens[] = $token;
+
+    // セッションにtokenをセット
+    // formから送られたものと識別をする
+    $this->session->set($key, $tokens);
+
+    return $token;
+  }
+
+  protected function checkCsrfToken($form_name, $token)
+  {
+    $key = 'csrf_tokens/' . $form_name;
+    $tokens = $this->session->get($key, array());
+
+    // tokensの中にPOSTされたtokenがあればtrue
+    if ( false !== ($pos = array_search($token, $tokens, true))){
+
+      // 一度チェックされたtokenは破棄
+      unset($token[$pos]);
+
+      $this->session->set($key, $tokens);
+
+      return true;
+    }
+
+    return false;
+  }
 }
