@@ -8,6 +8,8 @@ abstract class Application
 	protected $session;
 	protected $db_manager;
 
+	protected $login_action = array();
+
 	public function __construct($debug = false)
 	{
 		$this->setDebugMode($debug);
@@ -107,6 +109,11 @@ abstract class Application
 		} catch (HttpNotFoundException $e) {
 
 			$this->render404Page($e);
+
+			// ログインの例外処理
+		} catch (UnauthorizedActionException $e) {
+			list($controller, $action) = $this->login_action;
+			$this->runAction($controller, $action);
 		}
 
 		$this->response->send();
@@ -149,7 +156,7 @@ abstract class Application
 	protected function render404Page($e)
 	{
 		$this->response->setStatusCode(404, 'Not Found');
-		// 三項演算子　左がtrueじゃなければ右を返す
+		// 三項演算子 左がtrueじゃなければ右を返す
 		$message = $this->isDebugMode() ? $e->getMessage() : 'Page not found.';
 		$message = htmlspecialchars($message, ENT_QUOTES ,'UTF-8');
 		$this->response->setContent(<<<EOF

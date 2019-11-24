@@ -10,6 +10,9 @@ abstract class Controller
   protected $session;
   protected $db_manager;
 
+  // ログインが必要なアクションを指定するプロパティ
+  protected $auth_actions = array();
+
   public function __construct($application)
   {
     // "Controller"が10文字なので後ろの10文字分取り除いて小文字にする
@@ -35,9 +38,26 @@ abstract class Controller
       $this->forward404();
     }
 
+    if ($this->needsAuthentication($action) && !&$this->session->isAuthenticated()) {
+
+      throw new UnauthorizedActionException();
+    }
+
     $content = $this->$action_method($params);
 
     return $content;
+  }
+
+  protected function needsAuthentication($action)
+  {
+
+    if ($this->auth_actions === true || (is_array($this->auth_actions) && in_array($action, $this->auth_actions))) {
+
+      return true;
+    }
+
+    return false;
+
   }
 
   protected function render($variables = array(), $template = null, $layout = 'layout')
