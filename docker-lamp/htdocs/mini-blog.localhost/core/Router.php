@@ -37,7 +37,7 @@ class Router
 	// 変換済みのURLを正規表現を用いてルーティングとマッチングさせる
 	public function resolove($path_info)
 	{
-		if ('/' ! == substr($path_info, 0, 1)){
+		if ('/' !== substr($path_info, 0, 1)){
 			$path_info = '/' . $path_info;
 		}
 

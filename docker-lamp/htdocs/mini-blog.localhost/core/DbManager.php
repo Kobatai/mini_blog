@@ -5,9 +5,9 @@ class DbManager
 	protected $connections = array();
 
 	// 複数のDBへの接続情報 Repositoryクラスと接続名の対応を格納
-	protected $repository_connection_map();
+	protected $repository_connection_map;
 
-	public fucntion connect($name, $params)
+	public function connect($name, $params)
 	{
 		// paramsは接続に必要な情報 mergeで中身を入れる キーはnewするときに必ずあることになる
 		$params = array_merge(array(

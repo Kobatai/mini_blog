@@ -4,7 +4,7 @@ class MiniBlogApplication extends Application
 {
 	protected $login_action = array('account','signin');
 
-	// このphp自体がルートディレクトリに置かれているためそこ返す
+	// このphp自体がルートディレクトリに置かれているためそこを返す
 	public function getRootDir()
 	{
 		return dirname(_FILE_);

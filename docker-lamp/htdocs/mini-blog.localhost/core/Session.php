@@ -14,7 +14,7 @@ class Session
     }
   }
 
-  public funciton set($name, $value)
+  public function set($name, $value)
   {
     $_SESSION[$name] = $value;
   }
